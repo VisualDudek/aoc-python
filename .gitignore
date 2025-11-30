@@ -1,5 +1,6 @@
 # user custom
 .vscode/
+*/puzzle_input/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
