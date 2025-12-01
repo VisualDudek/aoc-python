@@ -24,7 +24,7 @@ class SplitOnFirst:
 
         return data
     
-class BruteForceSolver:
+class BruteForceSolverPart2:
     def solve(self, data: Data) -> int:
         dial = 50
         total_zeros = 0
@@ -68,7 +68,7 @@ def main():
     importer = DataImporter(loader=loader)
     data = importer.import_data()
 
-    solver = BruteForceSolver()
+    solver = BruteForceSolverPart2()
     puzzle = Puzzle(data=data, solver=solver)
     solution = puzzle.run()
     assert solution == 6634
