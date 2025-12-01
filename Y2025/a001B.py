@@ -7,6 +7,10 @@ class Loader(Protocol):
     def load(self) -> Data:
         ...
 
+class Solver(Protocol):
+    def solve(self, data: Data) -> int:
+        ...
+
 class SplitOnFirst:
     def __init__(self, file_path: str) -> None:
         self.file_path = file_path
@@ -19,25 +23,14 @@ class SplitOnFirst:
                 data.append((first, int(rest)))
 
         return data
-
-class DataImporter:
-    def __init__(self, loader: Loader) -> None:
-        self.loader = loader
-
-    def import_data(self):
-        data = self.loader.load()
-        return data
-
-class DataProcessor:
-    def __init__(self, data: Data) -> None:
-        self.data = data
-
-    def process(self) -> int:
+    
+class BruteForceSolver:
+    def solve(self, data: Data) -> int:
         dial = 50
         total_zeros = 0
 
         # Bute force simulation
-        for c, i in self.data:
+        for c, i in data:
             for _step in range(i):
                 if c == "R":
                     dial += 1
@@ -50,6 +43,23 @@ class DataProcessor:
                     total_zeros += 1
 
         return total_zeros
+
+class DataImporter:
+    def __init__(self, loader: Loader) -> None:
+        self.loader = loader
+
+    def import_data(self):
+        data = self.loader.load()
+        return data
+
+class Puzzle:
+    def __init__(self, data: Data, solver: Solver) -> None:
+        self.data = data
+        self.solver = solver
+
+    def run(self) -> int:
+        return self.solver.solve(self.data)
+        
     
 
 def main():
@@ -58,8 +68,9 @@ def main():
     importer = DataImporter(loader=loader)
     data = importer.import_data()
 
-    data_processor = DataProcessor(data)
-    solution = data_processor.process()
+    solver = BruteForceSolver()
+    puzzle = Puzzle(data=data, solver=solver)
+    solution = puzzle.run()
     assert solution == 6634
     print(f"Total dial points at 0 is: {solution}")
 
