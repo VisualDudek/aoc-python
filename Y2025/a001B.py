@@ -43,6 +43,26 @@ class BruteForceSolverPart2:
                     total_zeros += 1
 
         return total_zeros
+    
+
+class SolverPart1:
+    def solve(self, data: Data) -> int:
+        dial = 50
+        total_zeros = 0
+
+        for c, i in self.data:
+            if c == "R":
+                dial += i
+                dial = dial % 100
+            else:
+                dial -= i
+                dial = dial % 100
+
+            if dial == 0:
+                total_zeros += 1
+
+        return total_zeros
+
 
 class DataImporter:
     def __init__(self, loader: Loader) -> None:
