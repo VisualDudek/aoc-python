@@ -2,7 +2,11 @@ from typing import Protocol, List, Tuple
 import numpy as np
 from utils import DataImporter, Loader
 
-type Data = List[str]
+type Data = List[int]
+
+class Solver(Protocol):
+    def solve(self, data: Data) -> int:
+        ...
 
 class ExplicitLoopLoader:
     def __init__(self, file_path: str) -> None:
@@ -12,19 +16,29 @@ class ExplicitLoopLoader:
         data_list = []
         with open(self.file_path) as f:
             for line in f:
-                data_list.append(line.strip())
+                _tmp = []
+                for c in line:
+                    if c.isdigit():
+                        _tmp.append(c)
+
+                first, last = _tmp[0], _tmp[-1]
+                data_list.append(int(first + last))
 
         return data_list
 
-class DataProcessor:
-    def __init__(self, data: Data) -> None:
-        self.left, self.right = data
 
-    def process(self) -> int:
-        self.left.sort()
-        self.right.sort()
-        distances: List[int] = [abs(l - r) for l, r in zip(self.left, self.right)]
-        return sum(distances)
+class Puzzle:
+    def __init__(self, data: Data, solver: Solver) -> None:
+        self.data = data
+        self.solver = solver
+
+    def run(self) -> int:
+        return self.solver.solve(self.data)
+    
+
+class SumSolver:
+    def solve(self, data: Data) -> int:
+        return sum(data)
     
 
 def main():
@@ -32,7 +46,10 @@ def main():
     loader = ExplicitLoopLoader(file_path=file_path)
     importer = DataImporter(loader=loader)
     data = importer.import_data()
-    pass
+
+    puzzle = Puzzle(data=data, solver=SumSolver())
+    result = puzzle.run()
+    print(result)
     
 
 if __name__ == "__main__":
