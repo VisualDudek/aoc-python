@@ -73,24 +73,26 @@ def is_valid_id_factors(number: str) -> bool:
 
     return True
 
+def is_valid_id_custom_wrap(number: str) -> bool:
+
+    FACTORS = {1: [], 2: [1], 3: [1], 4: [2, 1], 5: [1], 6: [3, 2, 1], 7: [1], 8: [4, 2, 1], 9: [3, 1], 10: [5, 2, 1]}
+
+    for n in FACTORS[len(number)]:
+
+        if len(set(str(number)[j:j + n] for j in range(0, len(number), n))) == 1:
+            return False
+
+    return True
 
 class PuzzleSolver:
-    def solve(self, data: Data):
+    def __init__(self, is_valid=is_valid_id) -> None:
+        self.is_valid = is_valid
+
+    def solve(self, data: Data) -> int:
         _res: List[int] = []
         for first, last in data:
             for i in range(int(first), int(last)+ 1):
-                if not is_valid_id(str(i)):
-                    _res.append(i)
-
-        return sum(_res)
-
-
-class PuzzleSolverFactors:
-    def solve(self, data: Data):
-        _res: List[int] = []
-        for first, last in data:
-            for i in range(int(first), int(last)+ 1):
-                if not is_valid_id_factors(str(i)):
+                if not self.is_valid(str(i)):
                     _res.append(i)
 
         return sum(_res)
@@ -103,9 +105,7 @@ def main():
     data = importer.import_data()
     pass
 
-    # took 24 seconds
-    # solver = PuzzleSolver() 
-    solver = PuzzleSolverFactors()
+    solver = PuzzleSolver(is_valid=is_valid_id_custom_wrap) 
     puzzle = Puzzle(data=data, solver=solver)
     solution = puzzle.run()
     assert solution == 20077272987
