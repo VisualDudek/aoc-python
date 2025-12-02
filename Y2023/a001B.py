@@ -38,7 +38,25 @@ class Puzzle:
 
     def run(self) -> int:
         return self.solver.solve(self.data)
-    
+
+# what wnt wrong here?    
+# helper fn from Reddit solution
+import re
+
+def reddit(line: str) -> int: 
+    nums = 'one|two|three|four|five|six|seven|eight|nine'
+    nums_re = re.compile(r'(?=(\d|%s))' % nums)
+    nums = nums.split('|')
+
+    digits = []
+    for num in nums_re.findall(line):
+        if num in nums:
+            num = str(nums.index(num) + 1)
+        digits.append(num)
+    total = int(digits[0] + digits[-1])
+
+    return total
+
 
 class SumSolver:
     def solve(self, data: Data) -> int:
@@ -77,7 +95,7 @@ def data_transformer_wrong(data: Data) -> Data:
     
 
 def data_transformer(data: Data) -> Data:
-    res_data = []
+    data_res = []
     numbers_dict = {
         'one': '1', 
         'two': '2', 
@@ -89,24 +107,51 @@ def data_transformer(data: Data) -> Data:
         'eight': '8', 
         'nine': '9',
         }
+    FIRST_LETTERS = ('o', 't', 'f', 's', 'e')
     for line in data:
-        for i in range(len(line)):
-            # TODO
+        i = 0
+        line_tmp = ''
+        while i < len(line):
+            if i+3 <= len(line) and line[i:i+3] in ('one', 'two', 'six'):
+                line_tmp += numbers_dict[line[i:i+3]]
+                i += 3
+            elif i+4 <= len(line) and line[i:i+4] in ('four', 'five', 'nine'):
+                line_tmp += numbers_dict[line[i:i+4]]
+                i += 4
+            elif i+5 <= len(line) and line[i:i+5] in ('three', 'seven', 'eight'):
+                line_tmp += numbers_dict[line[i:i+5]]
+                i += 5
+            else:
+                line_tmp += line[i]
+                i += 1
 
-    return res_data
+        data_res.append(line_tmp)
+        print(f"Transformed line: {line} -> {line_tmp}")
+
+        # checking what went wrong
+        _tmp = []
+        for c in line_tmp:
+            if c.isdigit():
+                _tmp.append(c)
+
+        first, last = _tmp[0], _tmp[-1]
+
+        assert reddit(line) == int(first + last)
+
+    return data_res
 
 
 def main():
-    file_path = "puzzle_input/001_test.txt"
+    file_path = "puzzle_input/001.txt"
     loader = ExplicitLoopLoader(file_path=file_path)
     importer = DataImporter(loader=loader)
     data = importer.import_data()
     pass
 
-    data = data_transformer(data)
+    data_post = data_transformer(data)
     pass
 
-    puzzle = Puzzle(data=data, solver=SumSolver())
+    puzzle = Puzzle(data=data_post, solver=SumSolver())
     result = puzzle.run()
     print(result)
     
