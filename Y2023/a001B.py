@@ -114,21 +114,26 @@ def data_transformer(data: Data) -> Data:
         while i < len(line):
             if i+3 <= len(line) and line[i:i+3] in ('one', 'two', 'six'):
                 line_tmp += numbers_dict[line[i:i+3]]
-                i += 3
+                # i += 3
             elif i+4 <= len(line) and line[i:i+4] in ('four', 'five', 'nine'):
                 line_tmp += numbers_dict[line[i:i+4]]
-                i += 4
+                # i += 4
             elif i+5 <= len(line) and line[i:i+5] in ('three', 'seven', 'eight'):
                 line_tmp += numbers_dict[line[i:i+5]]
-                i += 5
+                # i += 5
             else:
                 line_tmp += line[i]
-                i += 1
+                # i += 1
+            i += 1
 
         data_res.append(line_tmp)
         print(f"Transformed line: {line} -> {line_tmp}")
 
         # checking what went wrong
+        # cSpell:disable-next-line
+        # FOUND IT: 28gtbkszmrtmnineoneightmx -> 28gtbkszmrtm91ightmx 
+        # missing last 9 because of faulty replacement logic with overlapping patterns
+        # incrementing i by one solved it, enabling overlapping pattern checks
         _tmp = []
         for c in line_tmp:
             if c.isdigit():
@@ -153,6 +158,7 @@ def main():
 
     puzzle = Puzzle(data=data_post, solver=SumSolver())
     result = puzzle.run()
+    assert result == 54265
     print(result)
     
 
