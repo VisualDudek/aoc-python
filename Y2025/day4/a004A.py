@@ -84,8 +84,8 @@ class AdjacentSolver:
 
 
 def main():
-    file_path = "../puzzle_input/004_test.txt"
-    # file_path = "puzzle_input/004.txt"
+    # file_path = "../puzzle_input/004_test.txt"
+    file_path = "../puzzle_input/004.txt"
     loader = ExplicitLoopLoader(file_path=file_path)
     importer = DataImporter(loader=loader)
     data = importer.import_data()
