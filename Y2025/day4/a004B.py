@@ -23,6 +23,15 @@ class ExplicitLoopLoader:
 
         return _data
 
+    # GOTCHA: nice "one-liner" using dict comprehension
+    def load_gotcha(self) -> Data:
+        with open(self.file_path) as f:
+            return {
+                (x,y): (c == "@")
+                for y, line in enumerate(f)
+                for x, c in enumerate(line.strip())
+            }
+
 
 class DataImporter:
     def __init__(self, loader: Loader) -> None:
