@@ -21,5 +21,9 @@ for outer in iterable1:      # first for in comprehension
 ```
 
 ## TAKEAWAY: open file with context manger
-
 Iterating over a file object `f` in a `with` context manager yields one line at a time.
+
+## GOTCHA: split on `f.read()`
+When you split on file e.g. `f.read().split('\n\n')` you lose magic `for line in f:` so you need to remember to `.split()` on further data.
+
+
