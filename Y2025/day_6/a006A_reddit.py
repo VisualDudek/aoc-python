@@ -1,4 +1,4 @@
-from typing import Dict, Generator, Protocol, List, Tuple
+from typing import Callable, Dict, Generator, Protocol, List, Tuple
 
 type Data = List[List[str]]
 
@@ -48,26 +48,32 @@ def iterate_over_columns(data: Data) -> Generator[tuple[str]]:
 
     return _res
 
+# GOTCHA: you can use mul and add from operator module
+from operator import mul, add
+from functools import reduce
 
 class SumSolverPart1:
     @staticmethod
     def solve(data: Data) -> int:
-        numbers = data[:-1]
-        operators = data[-1]
+        numbers: List[List[str]] = data[:-1]
+        operators: List[str] = data[-1]
 
-        numbers_by_column_gen = iterate_over_columns(numbers)
+        numbers_by_column_gen: List[tuple[str, ...]] = list(iterate_over_columns(numbers))
 
         total = 0
 
+        OPERATORS: dict[str, Callable[[int, int], int]] = {
+            "+": add,
+            "*": mul,
+        }
+
         # GOTCHA: you can go here with "folding" functional approach
-        for operator in operators:
-            if operator == "+":
-                total += sum(int(n) for n in next(numbers_by_column_gen))
-            elif operator == "*":
-                prod = 1
-                for n in next(numbers_by_column_gen):
-                    prod *= int(n)
-                total += prod
+        # GOTCHA: you can use zip to iterate simultaneously over operators and columns
+        # GOTCHA: numbers and number var names are confusing here
+        # GOTCHA: you can get rid of total variable with sum and return directly
+        for symbol, number in zip(operators, numbers_by_column_gen):
+            op = OPERATORS[symbol]
+            total += reduce(op, (int(n) for n in number))
 
         return total
 
@@ -82,6 +88,8 @@ def main():
 
     puzzle = Puzzle(data=data, solver=SumSolverPart1())
     solution = puzzle.run()
+    # assert solution ==  # Test
+    assert solution == 6417439773370 # My Puzzle Input
     print(f"Total sum is: {solution}")
 
     

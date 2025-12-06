@@ -1,0 +1,55 @@
+# refactor compute_total function to use operator module and reduce
+
+from typing import List, LiteralString
+
+
+input = """123 328  51 64 
+ 45 64  387 23 
+  6 98  215 314
+*   +   *   +  """
+
+*numbers_raw, symbols_raw = input.splitlines()
+
+symbols = symbols_raw.split()
+
+rows = [map(int, line.split()) for line in numbers_raw]
+columns: List[tuple[int, ...]] = list(zip(*rows))
+
+def compute_total(
+        columns: List[tuple[int, ...]], 
+        symbols: List[LiteralString]
+    ) -> int:
+
+    total = 0
+
+    for col_values, symbol in zip(columns, symbols):
+        if symbol == "+":
+            total += sum(col_values)
+        elif symbol == "*":
+            prod = 1
+            for n in col_values:
+                prod *= n
+            total += prod
+
+    return total
+
+# --- Solution ---
+def compute_total_with_operator_module(
+        columns: List[tuple[int, ...]], 
+        symbols: List[LiteralString]
+    ) -> int:
+
+    # CODE HERE
+
+    return None # type: ignore
+
+
+solution = compute_total(columns, symbols)
+print(f"Total sum is: {solution}")
+
+assert solution == 4277556 
+
+solution = compute_total_with_operator_module(columns, symbols)
+print(f"Total with operator module sum is: {solution}")
+
+assert solution == 4277556 

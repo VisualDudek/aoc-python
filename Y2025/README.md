@@ -194,3 +194,17 @@ The `main()` function (line 108) selects `is_valid_id_custom_wrap` as the produc
 - **Assertion-Based Testing**: Line 111 includes an assertion `assert solution == 20077272987` that serves as a regression test, ensuring the solution remains correct across refactoring.
 
 - **Commented Debug Code**: Line 114 contains commented-out cache statistics inspection, indicating the developer investigated memoization effectiveness during optimization.
+
+---
+
+## Y2025/a006A.py
+```python
+        numbers = data[:-1]
+        operators = data[-1]
+
+        numbers_by_column_gen = iterate_over_columns(numbers)
+
+        for operator in operators:
+            ...
+```
+do not do this, no idea what numbers and operators is and what will get when I start iterate over it.

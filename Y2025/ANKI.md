@@ -27,3 +27,25 @@ Iterating over a file object `f` in a `with` context manager yields one line at 
 When you split on file e.g. `f.read().split('\n\n')` you lose magic `for line in f:` so you need to remember to `.split()` on further data.
 
 
+## use `sum()` over variable `total += ...`
+
+
+## use `map()` inside list comprehension
+if `line.split()` gives you str than you can bo better:
+```python
+rows = [line.split() for line in numbers_raw]
+```
+use `map()`
+```python
+rows = [map(int, line.split()) for line in numbers_raw]
+```
+
+## do not leave last line untyped
+At the end of data transformation do not leave last line untyped
+```python
+rows = [map(int, line.split()) for line in numbers_raw]
+columns = list(zip(*rows))
+# give type hits
+columns: List[tuple[int, ...]] = list(zip(*rows))
+```
+
