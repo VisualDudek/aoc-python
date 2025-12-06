@@ -1,6 +1,6 @@
 from typing import Dict, Generator, Protocol, List, Tuple
 
-type Data = List[List[str]]
+type Data = List[str]
 
 class Solver(Protocol):
     def solve(self, data: Data) -> int:
@@ -87,7 +87,7 @@ def transpose_data_in_column(data: List[str]) -> List[int]:
 class SumSolverPart2:
     @staticmethod
     def solve(data: Data) -> int:
-        numbers = data[:-1]
+        numbers: List[str] = data[:-1]
         operators = data[-1]
         total = 0
 
