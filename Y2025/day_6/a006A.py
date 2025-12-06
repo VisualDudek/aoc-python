@@ -42,7 +42,7 @@ class Puzzle:
         return self.solver.solve(self.data)
 
 
-def iterate_over_columns(data: Data) -> Generator[List[str]]:
+def iterate_over_columns(data: Data) -> Generator[tuple[str]]:
 
     _res = (col_values for col_values in zip(*data))
 
