@@ -1,3 +1,9 @@
+"""
+- ont sure if this is the best way to do this...
+- could make Grid a dataclass with methods to get neighbors, etc.
+- could make Beam a class with position and direction ???
+- can I subclass dict to make Grid? and avoid code `grid.grid` ?
+"""
 from dataclasses import dataclass
 from typing import Dict, Generator, Protocol, List, Tuple
 
