@@ -5,6 +5,7 @@
 - can I subclass dict to make Grid? and avoid code `grid.grid` ?
 """
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import Dict, Generator, Protocol, List, Tuple
 
 type Point = Tuple[int, int]
@@ -48,19 +49,35 @@ def process_one_line(grid: Grid, beam_list: List[Point], y: int) -> List[Point]:
     # not needed anymore bc beams are moved when added to new_beam_list
     beam_moved_down = [(x, y + 1) for (x, y) in beam_list]
     
-    splitters = [point for point in grid.grid.keys() if point[1] == y]
+    splitters = tuple(point for point in grid.grid.keys() if point[1] == y)
     for beam in beam_list:
         # TODO: refactor to function
-        if beam in splitters:
-            # split beam
-            # GOTCHA: what if beam is at edge of grid?
-            new_beam_list.append((beam[0] - 1, beam[1] + 1))  # left
-            new_beam_list.append((beam[0] + 1, beam[1] + 1))  # right
-        else:
-            new_beam_list.append((beam[0], beam[1] + 1))  # down
+        # if beam in splitters:
+        #     # split beam
+        #     # GOTCHA: what if beam is at edge of grid?
+        #     new_beam_list.append((beam[0] - 1, beam[1] + 1))  # left
+        #     new_beam_list.append((beam[0] + 1, beam[1] + 1))  # right
+        # else:
+        #     new_beam_list.append((beam[0], beam[1] + 1))  # down
+
+        new_beam_list.extend(helper(beam, splitters, y))
 
     print(f"Processed line y={y} with no. of beams: {len(new_beam_list)}")
 
+    return new_beam_list
+
+# GOTCHA: lru_cache needs hashable args
+# GOTCHA: cache wont help you here, need different approach
+@lru_cache(maxsize=None)
+def helper(beam: Point, splitters: tuple[Point], y: int) -> List[Point]:
+    new_beam_list = []
+    if beam in splitters:
+        # split beam
+        # GOTCHA: what if beam is at edge of grid?
+        new_beam_list.append((beam[0] - 1, beam[1] + 1))  # left
+        new_beam_list.append((beam[0] + 1, beam[1] + 1))  # right
+    else:
+        new_beam_list.append((beam[0], beam[1] + 1))  # down
     return new_beam_list
 
 
