@@ -28,6 +28,8 @@ class JBox:
         for box in boxes:
             if box is self:
                 continue
+            if box.is_middle_box:
+                continue
             # compute Euclidean distance
             dist = ((self.position[0] - box.position[0]) ** 2 +
                     (self.position[1] - box.position[1]) ** 2 +
@@ -48,6 +50,15 @@ def main():
         box.get_closest_box(j_boxes)
         if box.closest_neighbor is not None:  # crazy mypy issue
             print(f"Box at {box.position} closest to {box.closest_neighbor.position} with distance {box.distance}")
+
+    circuits = []
+
+    for i in range(10):
+        # find two boxes with lowest distance
+        _tmp = [box for box in j_boxes if not box.is_middle_box]
+        sorted_boxes = sorted(_tmp, key=lambda x: x.distance if x.distance is not None else float('inf'))
+        box1 = sorted_boxes[0]
+        box2 = box1.closest_neighbor
 
 
 if __name__ == '__main__':
