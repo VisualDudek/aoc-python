@@ -1,4 +1,6 @@
 """
+- solution based on NOTES.md file, getting stuck with cognitive load of managing circuits,
+especially when boxes can be in multiple circuits
 """
 from dataclasses import dataclass
 from typing import Dict, Generator, Protocol, List, Tuple, Union
