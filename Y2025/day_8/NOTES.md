@@ -1,4 +1,4 @@
-TILT:
+## TILT:
 - DSU, Disjoint Set Union
 
 1. Data class for "junction box"
@@ -9,10 +9,11 @@ TILT:
 
 
 
-remarks:
-- "strings of lights" -> there is only one line, one end and one bgn point -> middle ones drop out
+## Considerations:
+- ~~"strings of lights"~~ NOPE -> there is only one line, one end and one bgn point -> middle ones drop out
 
 
+## Steps
 1. Step 1. only once at the bgn
 - for each point ~~that is not middle~~, calculate nearest distance,
 - keep data of nearest distance and point

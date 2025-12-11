@@ -10,6 +10,7 @@ Python solutions for Advent of Code challenges
 - [Dazbo's AoC Walkthroughs](https://aoc.just2good.co.uk/)
 - [Garden of Learning](https://notes.hamatti.org/technology/advent-of-code/)
 - [awesome AoC](https://github.com/Bogdanp/awesome-advent-of-code)
+- [interesting AoC GitHub](https://github.com/hermes85pl)
 
 ## Python-Specific Techniques Used
 
