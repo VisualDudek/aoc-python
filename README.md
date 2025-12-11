@@ -7,6 +7,9 @@ Python solutions for Advent of Code challenges
 - 500 Stars: A Categorization and Mega-Guide [reddit thread link](https://www.reddit.com/r/adventofcode/comments/1p3pc21/500_stars_a_categorization_and_megaguide/)
 - [Josiah Winslow solves AoC](https://aoc.winslowjosiah.com/)
 - [@xavdid does Advent of Code](https://advent-of-code.xavd.id/)
+- [Dazbo's AoC Walkthroughs](https://aoc.just2good.co.uk/)
+- [Garden of Learning](https://notes.hamatti.org/technology/advent-of-code/)
+- [awesome AoC](https://github.com/Bogdanp/awesome-advent-of-code)
 
 ## Python-Specific Techniques Used
 
