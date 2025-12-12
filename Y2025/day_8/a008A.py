@@ -1,13 +1,16 @@
 """
-- solution based on NOTES.md file, getting stuck with cognitive load of managing circuits,
-especially when boxes can be in multiple circuits
+- solution based on NOTES.md file, Approach #2,
+- second approach after getting stuck with cognitive load of managing circuits,
+- using DSU (Disjoint Set Union) data structure to manage circuits
 """
 from dataclasses import dataclass
 from typing import Dict, Generator, Protocol, List, Tuple, Union
+from itertools import combinations
+from math import dist, prod
 
 type Point = Tuple[int, int, int]
 
-def load_j_boxes(file_path: str) -> List[Point]:
+def load(file_path: str) -> List[Point]:
     _boxes = []
 
     with open(file_path) as f:
@@ -17,50 +20,86 @@ def load_j_boxes(file_path: str) -> List[Point]:
 
     return _boxes
 
-class JBox:
-    def __init__(self, position: Point) -> None:
-        self.position = position
-        self.member_of_circuit = False
-        self.is_middle_box = False
-        self.distance = None
-        self.closest_neighbor: Union[None, 'JBox'] = None
 
-    def get_closest_box(self, boxes: List["JBox"]) -> None:
-        _tmp = []
-        for box in boxes:
-            if box is self:
-                continue
-            if box.is_middle_box:
-                continue
-            # compute Euclidean distance
-            dist = ((self.position[0] - box.position[0]) ** 2 +
-                    (self.position[1] - box.position[1]) ** 2 +
-                    (self.position[2] - box.position[2]) ** 2) ** 0.5
-            _tmp.append((dist, box))
+class DSU:
+    def __init__(self, elements=None):
+        """
+        elements: optional iterable of initial elements
+        """
+        self.parent = {}
+        self.rank = {}
+        # PUZZLE SPECIFIC:
+        self.size = {item: 1 for item in elements} if elements is not None else {}
 
-        _tmp.sort(key=lambda x: x[0])
-        self.distance, self.closest_neighbor = _tmp[0]
+        # Initially each element is its own parent (self root)
+        if elements is not None:
+            for x in elements:
+                self.parent[x] = x
+                self.rank[x] = 0
+
+    def find(self, x):
+        # lazy initialization for unseen elements
+        # due to puzzle specific usage od self.size below not work properly
+
+        # if x not in self.parent:
+        #     self.parent[x] = x
+        #     self.rank[x] = 0
+        #     return x
+
+        # GOTCHA: path compression -> flattening the tree
+        if self.parent[x] != x:
+            self.parent[x] = self.find(self.parent[x])  # path compression
+        return self.parent[x]
+
+    def union(self, x, y):
+        rx = self.find(x)
+        ry = self.find(y)
+
+        if rx == ry:
+            return False
+
+        # Why do I need union by rank?
+        # union by rank
+        if self.rank[rx] < self.rank[ry]:
+            self.parent[rx] = ry
+            # PUZZLE SPECIFIC:
+            self.size[ry] += self.size[rx]
+            del self.size[rx]
+        elif self.rank[rx] > self.rank[ry]:
+            self.parent[ry] = rx
+            # PUZZLE SPECIFIC:
+            self.size[rx] += self.size[ry]
+            del self.size[ry]
+        else:
+            self.parent[ry] = rx
+            self.rank[rx] += 1
+            self.size[rx] += self.size[ry]
+            del self.size[ry]
+
+        return True
+
 
 def main():
-    file_path = "../puzzle_input/008_test.txt"
-    # file_path = "../puzzle_input/008.txt"
-    boxes = load_j_boxes(file_path)
-    j_boxes = [JBox(position=box) for box in boxes]
-    pass
+    # file_path = "../puzzle_input/008_test.txt"
+    file_path = "../puzzle_input/008.txt"
+    boxes: List[Point] = load(file_path)
 
-    for box in j_boxes:
-        box.get_closest_box(j_boxes)
-        if box.closest_neighbor is not None:  # crazy mypy issue
-            print(f"Box at {box.position} closest to {box.closest_neighbor.position} with distance {box.distance}")
+    data = sorted(combinations(boxes, 2), key=lambda pair: dist(*pair))
 
-    circuits = []
+    dsu = DSU(elements=boxes)
 
-    for i in range(10):
-        # find two boxes with lowest distance
-        _tmp = [box for box in j_boxes if not box.is_middle_box]
-        sorted_boxes = sorted(_tmp, key=lambda x: x.distance if x.distance is not None else float('inf'))
-        box1 = sorted_boxes[0]
-        box2 = box1.closest_neighbor
+    number_of_unions = 1_000 # 10 for test input, 1000 for real input
+
+    for box1, box2 in data[:number_of_unions]:
+        dsu.union(box1, box2)
+
+    # How to count len of disjoint sets?
+    # Answer: dsu.size keeps track of sizes of each disjoint set
+
+    res = prod(sorted(dsu.size.values(), reverse=True)[:3])
+
+    print(f"Result: {res}")
+    # assert res == 40 # expected for test input
 
 
 if __name__ == '__main__':
