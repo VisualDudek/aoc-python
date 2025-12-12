@@ -35,3 +35,7 @@
 - need list of pairs sorted by distance
 
 - after I got unions on DSU how to get solution: len of each tree ?
+
+### PART 2
+Does the solution is in last pair? NOPE This is not a question about connecting last possible pair, where should be prior this point when all points are connected and the last pair that do this is the solution.
+So the solution emerge when `len(DSU_dict) == 1` that implies that all points are connected
