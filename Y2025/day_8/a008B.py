@@ -88,9 +88,18 @@ def main():
 
     data = sorted(combinations(boxes, 2), key=lambda pair: dist(*pair))
 
-    x, y = data[-1]
-    res = x[0] * y[0]
-    print(f"Result: {res}")
+    dsu = DSU(elements=boxes)
+
+    number_of_unions = 1_000 # 10 for test input, 1000 for real input
+
+    for box1, box2 in data:
+        dsu.union(box1, box2)
+
+        if len(dsu.size) == 1:
+            res_part2 = box1[0] * box2[0]
+            assert res_part2 == 274150525 
+            print(f"Result Part 2: {res_part2}")
+            break
 
 
 if __name__ == '__main__':
