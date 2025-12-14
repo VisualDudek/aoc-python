@@ -6,6 +6,9 @@ Easy
 ## Part 2
 The question is does given rectangle overlap the green shape template, mind that green one shape is not siple rectangle
 
+Potential Optimizations:
+- sort rectangles by area, check bigger ones first, if overlap found early can skip smaller ones
+
 ### Brute Force
 - Calculate all points that form green template shape,
     - WOW how to find out which part is inside vs. outside green tiles (???)
@@ -37,3 +40,6 @@ Map the ~495 unique x/y values to indices 0-494, reducing the grid to ~495×495 
 
 3. Work with line segments
 Instead of filling the grid, keep track of horizontal/vertical line segments and check overlaps mathematically.
+
+### Grid Compression Approach FAILED ATTEMPT
+1. Map points to compressed coordinates (all points are unique)
