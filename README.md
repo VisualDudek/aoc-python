@@ -11,6 +11,7 @@ Python solutions for Advent of Code challenges
 - [Garden of Learning](https://notes.hamatti.org/technology/advent-of-code/)
 - [awesome AoC](https://github.com/Bogdanp/awesome-advent-of-code)
 - [interesting AoC GitHub](https://github.com/hermes85pl)
+- [Anze's Blog](https://blog.pecar.me/advent-of-code-2025)
 
 ## Python-Specific Techniques Used
 
